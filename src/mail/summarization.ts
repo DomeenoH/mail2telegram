@@ -9,7 +9,7 @@ export async function summarizedByWorkerAI(ai: Ai, model: string, prompt: string
         messages: [
             {
                 role: 'system',
-                content: 'You are a professional email summarization assistant.',
+                content: '你是一个专业的邮件总结助手。你必须严格使用中文进行回答。严禁直接使用英文进行总结。你的总结应当简洁、清晰，直接提供邮件摘要。',
             },
             {
                 role: 'user',
@@ -19,10 +19,15 @@ export async function summarizedByWorkerAI(ai: Ai, model: string, prompt: string
     }) as WorkersAiResponse | string;
 
     if (typeof result === 'string') {
-        return result;
+        return result || 'AI 暂时无法生成总结。';
     }
 
-    return result?.response ?? '';
+    if (result?.response) {
+        return result.response;
+    }
+
+    console.error('AI Response Error:', result);
+    return '抱歉，AI 总结服务返回了空结果。';
 }
 
 export async function summarizedByOpenAI(key: string, endpoint: string, model: string, prompt: string): Promise<string> {
@@ -40,7 +45,7 @@ export async function summarizedByOpenAI(key: string, endpoint: string, model: s
             messages: [
                 {
                     role: 'system',
-                    content: 'You are a professional email summarization assistant.',
+                    content: '你是一个专业的邮件总结助手。你必须严格使用中文进行回答。严禁直接使用英文进行总结。你的总结应当简洁、清晰，直接提供邮件摘要。',
                 },
                 {
                     role: 'user',

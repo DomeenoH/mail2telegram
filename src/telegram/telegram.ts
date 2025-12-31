@@ -101,7 +101,7 @@ async function telegramCommandHandler(message: Telegram.Message, env: Environmen
     }
     let [command] = message.text?.split(/ (.*)/) || [''];
     if (!command.startsWith('/')) {
-        console.log(`Invalid command: ${command}`);
+        await handleIDCommand(env)(message);
         return;
     }
     command = command.substring(1);
@@ -151,7 +151,17 @@ async function telegramCallbackHandler(callback: Telegram.CallbackQuery, env: En
                 message_id: messageId,
                 ...req,
             };
-            await api.editMessageText(params);
+            try {
+                await api.editMessageTextWithReturns(params);
+            } catch (e) {
+                if (params.parse_mode) {
+                    console.error(`Render failed with ${params.parse_mode}: ${(e as Error).message}. Falling back to plain text.`);
+                    delete params.parse_mode;
+                    await api.editMessageTextWithReturns(params);
+                } else {
+                    throw e;
+                }
+            }
         };
     };
 

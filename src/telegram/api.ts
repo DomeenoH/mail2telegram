@@ -57,7 +57,12 @@ class APIClientBase {
     }
 
     async requestJSON<T, R>(method: Telegram.BotMethod, params: T): Promise<R> {
-        return this.request(method, params).then(res => res.json() as R);
+        const res = await this.request(method, params);
+        const data = await res.json() as any;
+        if (!res.ok || data.ok === false) {
+            throw new Error(data.description || `Telegram API error: ${res.status}`);
+        }
+        return data as R;
     }
 }
 

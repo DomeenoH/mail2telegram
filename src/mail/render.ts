@@ -7,6 +7,7 @@ export interface EmailDetailParams {
     text: string;
     reply_markup: Telegram.InlineKeyboardMarkup;
     link_preview_options: Telegram.LinkPreviewOptions;
+    parse_mode?: 'Markdown' | 'HTML' | 'MarkdownV2';
 }
 
 export type EmailRender = (mail: EmailCache, env: Environment) => Promise<EmailDetailParams>;
@@ -61,9 +62,10 @@ export async function renderEmailListMode(mail: EmailCache, env: Environment): P
     };
 }
 
-function renderEmailDetail(text: string | undefined | null, id: string): EmailDetailParams {
+function renderEmailDetail(text: string | undefined | null, id: string, parseMode?: 'Markdown' | 'HTML' | 'MarkdownV2'): EmailDetailParams {
     return {
         text: text || 'No content',
+        parse_mode: parseMode,
         reply_markup: {
             inline_keyboard: [
                 [
@@ -100,7 +102,7 @@ export async function renderEmailSummaryMode(mail: EmailCache, env: Environment)
     } = env;
 
     const req = renderEmailDetail('', mail.id);
-    const prompt = `Summarize the following text in approximately 50 words with ${SUMMARY_TARGET_LANG}\n\n${mail.text}`;
+    const prompt = `请用中文总结以下邮件内容（严禁输出英文总结）：\n\n${mail.text}`;
 
     try {
         if (AI && WORKERS_AI_MODEL) {
@@ -113,6 +115,7 @@ export async function renderEmailSummaryMode(mail: EmailCache, env: Environment)
     } catch (e) {
         req.text = `Failed to summarize the email: ${(e as Error).message}`;
     }
+    req.parse_mode = 'Markdown';
     return req;
 }
 

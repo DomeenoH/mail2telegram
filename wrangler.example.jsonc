@@ -18,18 +18,12 @@
         "DOMAIN": "mail2telegram.YOUR_NAME.workers.dev",
         "TELEGRAM_ID": "YOUR_TELEGRAM_ID",
         "TELEGRAM_TOKEN": "YOUR_TELEGRAM_TOKEN",
-        "FORWARD_LIST": "YOUR_BACKUP_EMAIL",
-        // "WORKERS_AI_MODEL": "@cf/meta/llama-3-8b-instruct", // Remove the comment to enable Workers AI
-        // "OPENAI_API_KEY": "sk-", // Remove the comment to enable OpenAI
-        // "OPENAI_COMPLETIONS_API": "https://openrouter.ai/api/v1/chat/completions",
-        // "OPENAI_CHAT_MODEL": "openai/gpt-4o-mini",
-        // "SUMMARY_TARGET_LANG": "chinese",
-        // "WHITE_LIST": "Suggested settings in the Telegram mini apps",
-        // "BLOCK_LIST": "Suggested settings in the Telegram mini apps",
-        // "MAIL_TTL": "3600",
+        "FORWARD_LIST": "YOUR_BACKUP_EMAIL@example.com",
+        "SUMMARY_TARGET_LANG": "chinese",
+        "WORKERS_AI_MODEL": "@cf/google/gemma-3-12b-it",
         "GUARDIAN_MODE": "false",
-        // "MAX_EMAIL_SIZE": "524288",
         "MAX_EMAIL_SIZE_POLICY": "truncate",
+        "MAIL_TTL": "604800",
         "DEBUG": "false"
     }
 }
